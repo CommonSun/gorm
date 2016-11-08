@@ -15,7 +15,7 @@ func saveBeforeAssociationsCallback(scope *Scope) {
 	// 	return
 	// }
 	for _, field := range scope.Fields() {
-		if scope.changeableField(field) && !field.IsBlank && !field.IsIgnored {
+		if scope.changeableField(field) && !field.IsBlank && !field.IsIgnored && !field.IsReadOnly {
 			if relationship := field.Relationship; relationship != nil && relationship.Kind == "belongs_to" {
 				fieldValue := field.Field.Addr().Interface()
 				scope.Err(scope.NewDB().Save(fieldValue).Error)
@@ -38,7 +38,7 @@ func saveAfterAssociationsCallback(scope *Scope) {
 		return
 	}
 	for _, field := range scope.Fields() {
-		if scope.changeableField(field) && !field.IsBlank && !field.IsIgnored {
+		if scope.changeableField(field) && !field.IsBlank && !field.IsIgnored && !field.IsReadOnly {
 			if relationship := field.Relationship; relationship != nil &&
 				(relationship.Kind == "has_one" || relationship.Kind == "has_many" || relationship.Kind == "many_to_many") {
 				value := field.Field

@@ -61,6 +61,7 @@ type StructField struct {
 	IsPrimaryKey    bool
 	IsNormal        bool
 	IsIgnored       bool
+	IsReadOnly      bool
 	IsScanner       bool
 	HasDefaultValue bool
 	Tag             reflect.StructTag
@@ -78,6 +79,7 @@ func (structField *StructField) clone() *StructField {
 		IsPrimaryKey:    structField.IsPrimaryKey,
 		IsNormal:        structField.IsNormal,
 		IsIgnored:       structField.IsIgnored,
+		IsReadOnly:      structField.IsReadOnly,
 		IsScanner:       structField.IsScanner,
 		HasDefaultValue: structField.HasDefaultValue,
 		Tag:             structField.Tag,
@@ -166,6 +168,9 @@ func (scope *Scope) GetModelStruct() *ModelStruct {
 			if _, ok := field.TagSettings["-"]; ok {
 				field.IsIgnored = true
 			} else {
+				if _, ok := field.TagSettings["READ_ONLY"]; ok {
+					field.IsReadOnly = true
+				}
 				if _, ok := field.TagSettings["PRIMARY_KEY"]; ok {
 					field.IsPrimaryKey = true
 					modelStruct.PrimaryFields = append(modelStruct.PrimaryFields, field)
