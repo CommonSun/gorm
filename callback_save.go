@@ -11,14 +11,13 @@ func commitOrRollbackTransactionCallback(scope *Scope) {
 }
 
 func saveBeforeAssociationsCallback(scope *Scope) {
-	// if !scope.shouldSaveAssociations() {
-	// 	return
-	// }
 	for _, field := range scope.Fields() {
 		if scope.changeableField(field) && !field.IsBlank && !field.IsIgnored && !field.IsReadOnly {
 			if relationship := field.Relationship; relationship != nil && relationship.Kind == "belongs_to" {
 				fieldValue := field.Field.Addr().Interface()
-				scope.Err(scope.NewDB().Save(fieldValue).Error)
+				if scope.shouldSaveAssociations() {
+					scope.Err(scope.NewDB().Save(fieldValue).Error)
+				}
 				if len(relationship.ForeignFieldNames) != 0 {
 					// set value's foreign key
 					for idx, fieldName := range relationship.ForeignFieldNames {
