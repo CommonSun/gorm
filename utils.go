@@ -173,7 +173,7 @@ func fileWithLineNum() string {
 		_, file, line, ok := runtime.Caller(i)
 		// Skip gorm package files
 		// if ok && (!regexp.MustCompile(`jinzhu/gorm/.*.go`).MatchString(file) || regexp.MustCompile(`jinzhu/gorm/.*test.go`).MatchString(file)) {
-		if ok && (!regexp.MustCompile(`CommonSun/gorm/.*.go`).MatchString(file) || regexp.MustCompile(`CommonSun/gorm/.*test.go`).MatchString(file)) {
+		if ok && (!regexp.MustCompile(`CommonSun/gorm(@.*)?/.*.go`).MatchString(file) || regexp.MustCompile(`CommonSun/gorm(@.*)?/.*test.go`).MatchString(file)) {
 			return fmt.Sprintf("%v:%v", file, line)
 		}
 	}
