@@ -7,5 +7,5 @@ type Instrumenter interface {
 
 // Instrument allows an instrumenter to manipulate the db object
 func (s *DB) Instrument(i Instrumenter) *DB {
-	return i.Instrument(s.clone()).db
+	return i.Instrument(s.clone())
 }
