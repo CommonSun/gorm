@@ -26,6 +26,9 @@ var NowFunc = func() time.Time {
 var commonInitialisms = []string{"API", "ASCII", "CPU", "CSS", "DNS", "EOF", "GUID", "HTML", "HTTP", "HTTPS", "ID", "IP", "JSON", "LHS", "QPS", "RAM", "RHS", "RPC", "SLA", "SMTP", "SSH", "TLS", "TTL", "UI", "UID", "UUID", "URI", "URL", "UTF8", "VM", "XML", "XSRF", "XSS"}
 var commonInitialismsReplacer *strings.Replacer
 
+var goSrcRegexp = regexp.MustCompile(`!common!sun/gorm(@.*)?/.*.go`)
+var goTestRegexp = regexp.MustCompile(`!common!sun/gorm(@.*)?/.*test.go`)
+
 func init() {
 	var commonInitialismsForReplacer []string
 	for _, initialism := range commonInitialisms {
@@ -173,7 +176,7 @@ func fileWithLineNum() string {
 		_, file, line, ok := runtime.Caller(i)
 		// Skip gorm package files
 		// if ok && (!regexp.MustCompile(`jinzhu/gorm/.*.go`).MatchString(file) || regexp.MustCompile(`jinzhu/gorm/.*test.go`).MatchString(file)) {
-		if ok && (!regexp.MustCompile(`CommonSun/gorm(@.*)?/.*.go`).MatchString(file) || regexp.MustCompile(`CommonSun/gorm(@.*)?/.*test.go`).MatchString(file)) {
+		if ok && (!goSrcRegexp.MatchString(file) || goTestRegexp.MatchString(file)) {
 			return fmt.Sprintf("%v:%v", file, line)
 		}
 	}
