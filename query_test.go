@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"reflect"
 
-	"github.com/jinzhu/gorm"
+	"github.com/CommonSun/gorm"
 	"github.com/jinzhu/now"
 
 	"testing"
